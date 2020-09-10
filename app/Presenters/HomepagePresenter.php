@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\Components\DataGrid;
+use App\Model\DataLoader;
 use Nette;
 use Tracy\Debugger;
-
+use GuzzleHttp;
+use Nette\Utils\Json;
 
 /**
  * Class HomepagePresenter
@@ -14,6 +17,9 @@ use Tracy\Debugger;
  */
 final class HomepagePresenter extends Nette\Application\UI\Presenter
 {
+
+    /** @var DataLoader @inject */
+    public $dataLoader;
 
     /**
      * Redirect if logged in.
@@ -32,7 +38,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     {
         $form = new Nette\Application\UI\Form();
 
-        $form->addPassword("password","Zadejte heslo:")
+        $form->addPassword("password", "Zadejte heslo:")
             ->setRequired();
 
         $form->addSubmit("submit");
@@ -53,7 +59,7 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
         $user = $this->getUser();
 
         try {
-            $user->login("user1",$data->password);
+            $user->login("user1", $data->password);
             $user->setExpiration('30 minutes');
             $this->redirectUrl("/tabulka");
         } catch (Nette\Security\AuthenticationException $e) {
@@ -63,19 +69,40 @@ final class HomepagePresenter extends Nette\Application\UI\Presenter
     }
 
 
+    /**
+     * @throws Nette\Application\AbortException
+     */
     public function renderTabulka()
     {
-        if($this->getUser()->isLoggedIn() == false)
-        {
+        if ($this->getUser()->isLoggedIn() == false) {
             $this->redirectUrl("/");
         }
     }
 
+
+    /**
+     * @throws Nette\Application\AbortException
+     */
     public function handleLogout()
     {
         $this->getUser()->logout();
         $this->redirectUrl("/");
     }
+
+
+    /**
+     * Nacist data jako JSON do session
+     */
+    public function handleNacist()
+    {
+        $this->dataLoader->loadJsonFromUrlToSession("https://reqres.in/api/users?per_page=100");
+    }
+
+    public function createComponentDataGrid()
+    {
+        return new DataGrid($this->getSession());
+    }
+
 
 
 }

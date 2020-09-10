@@ -1,0 +1,29 @@
+<table >
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Křestní jméno</th>
+        <th>Příjmení</th>
+        <th>Avatar</th>
+    </tr>
+    {foreach $data as $row}
+        <tr>
+            <td>{$row["id"]}</td>
+            <td>{$row["email"]}</td>
+            <td>{$row["first_name"]}</td>
+            <td>{$row["last_name"]}</td>
+            <td><img src="{$row["avatar"]}"></td>
+            <td><a n:href="delete! $row['id']"><button>Smazat</button></a></td>
+        </tr>
+    {/foreach}
+</table>
+
+<style>
+    tr{
+        text-align: center;
+    }
+
+    table{
+        border: 1px solid black;
+    }
+</style>

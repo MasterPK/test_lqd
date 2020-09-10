@@ -20,3 +20,4 @@ di:
 services:
 	router: App\Router\RouterFactory::createRouter
 	authenticator: App\Security\Authenticator
+	dataLoader: App\Model\DataLoader
