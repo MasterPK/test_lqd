@@ -6,6 +6,8 @@
         <th>Příjmení</th>
         <th>Avatar</th>
     </tr>
+    {ifset $data}
+
     {foreach $data as $row}
         <tr>
             <td>{$row["id"]}</td>
@@ -16,6 +18,7 @@
             <td><a n:href="delete! $row['id']"><button>Smazat</button></a></td>
         </tr>
     {/foreach}
+    {/ifset}
 </table>
 
 <style>
