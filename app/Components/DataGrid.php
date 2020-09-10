@@ -32,7 +32,6 @@ class DataGrid extends Nette\Application\UI\Control
 
     public function handleDelete($id)
     {
-        Debugger::barDump($this->dataSource);
 
         foreach ($this->dataSource["data"] as $row)
         {
@@ -43,7 +42,6 @@ class DataGrid extends Nette\Application\UI\Control
             }
         }
 
-        Debugger::barDump($this->dataSource);
         $this->section->dataSource=$this->dataSource;
     }
 
